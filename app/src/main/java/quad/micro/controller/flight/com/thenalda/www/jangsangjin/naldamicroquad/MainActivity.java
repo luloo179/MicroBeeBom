@@ -754,7 +754,6 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
             }
 
             case 1: {
-                //very very important fly control and video viewer fragment
                 //start control thread and start viewer thread
                 //handler update autopilot state info
 
