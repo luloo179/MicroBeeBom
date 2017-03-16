@@ -1,0 +1,218 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.setup_fragment.SetupGainFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000">
+
+        <ImageButton
+            android:id="@+id/fragment_setup_gain_backbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="3dip"
+            android:background="#00000000"
+            android:src="@drawable/ic_keyboard_arrow_left_white_18dp" />
+
+        <TextView
+            android:id="@+id/fragment_setup_gain_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="10dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dip"
+                    android:text="Gain A : "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fragment_setup_gain_gain_a_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dip"
+                    android:text="0"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="#F1F2F3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:padding="10dip">
+
+                <ImageButton
+                    android:id="@+id/fragment_setup_gain_gain_a_minus_imagebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:background="#00000000"
+                    android:src="@drawable/ic_remove_circle_outline_black_18dp" />
+
+                <ImageButton
+                    android:id="@+id/fragment_setup_gain_gain_a_plus_imagebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:background="#00000000"
+                    android:src="@drawable/ic_add_circle_outline_black_18dp" />
+
+                <SeekBar
+                    android:id="@+id/fragment_setup_gain_gain_a_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:layout_toLeftOf="@id/fragment_setup_gain_gain_a_plus_imagebutton"
+                    android:layout_toRightOf="@id/fragment_setup_gain_gain_a_minus_imagebutton" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="10dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dip"
+                    android:text="Gain B : "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fragment_setup_gain_gain_b_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dip"
+                    android:text="0"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="#F1F2F3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:padding="10dip">
+
+                <ImageButton
+                    android:id="@+id/fragment_setup_gain_gain_b_minus_imagebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:background="#00000000"
+                    android:src="@drawable/ic_remove_circle_outline_black_18dp" />
+
+                <ImageButton
+                    android:id="@+id/fragment_setup_gain_gain_b_plus_imagebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:background="#00000000"
+                    android:src="@drawable/ic_add_circle_outline_black_18dp" />
+
+                <SeekBar
+                    android:id="@+id/fragment_setup_gain_gain_b_seekbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="10dip"
+                    android:layout_toLeftOf="@id/fragment_setup_gain_gain_b_plus_imagebutton"
+                    android:layout_toRightOf="@id/fragment_setup_gain_gain_b_minus_imagebutton" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF">
+
+                <Button
+                    android:id="@+id/fragment_setup_gain_save_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dip"
+                    android:text="SAVE" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,195 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    tools:context="quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.setup_fragment.SetupBiasFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000">
+
+        <ImageButton
+            android:id="@+id/fragment_setup_bais_backbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="3dip"
+            android:background="#00000000"
+            android:src="@drawable/ic_keyboard_arrow_left_white_18dp" />
+
+        <TextView
+            android:id="@+id/fragment_setup_bias_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="X"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dip"
+                            android:background="#F1F2F3" />
+
+                        <TextView
+                            android:id="@+id/fragment_setup_bias_x_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="0"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="Y"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dip"
+                            android:background="#F1F2F3" />
+
+                        <TextView
+                            android:id="@+id/fragment_setup_bias_y_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="0"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="Z"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dip"
+                            android:background="#F1F2F3" />
+
+                        <TextView
+                            android:id="@+id/fragment_setup_bias_z_textview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dip"
+                            android:text="0"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+            <Button
+                android:id="@+id/fragment_setup_bias_calib_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:text="Calibration Start" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dip"
+                android:background="#F1F2F3" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

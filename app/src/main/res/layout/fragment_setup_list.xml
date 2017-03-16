@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.setup_fragment.SetupListFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000">
+
+        <ImageButton
+            android:id="@+id/fragment_setup_backbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="3dip"
+            android:background="#00000000"
+            android:src="@drawable/ic_keyboard_arrow_left_white_18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Settings"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/fragment_setup_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#F9FAFB"
+        android:dividerHeight="1dip" />
+
+</LinearLayout>

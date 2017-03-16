@@ -1,0 +1,228 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.fly_fragment.Fly1Fragment">
+
+    <LinearLayout
+        android:id="@+id/fragment_fly1_top_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:background="#000000"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/fragment_fly1_back_button_imagebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:background="#00000000"
+                android:src="@drawable/ic_keyboard_arrow_left_white_18dp" />
+
+        </RelativeLayout>
+
+
+        <ImageButton
+            android:id="@+id/afragment_fly1_sreen_mode_imagebutton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:src="@drawable/ic_settings_overscan_white_18dp" />
+
+        <ImageButton
+            android:id="@+id/fragment_fly1_video_imagebutton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:src="@drawable/ic_videocam_white_18dp" />
+
+        <TextView
+            android:id="@+id/fragment_fly1_connection_state_textview"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="NOT CONNECT"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/fragment_fly1_gps_mode_imagebutton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:src="@drawable/ic_local_parking_white_18dp" />
+
+
+        <ImageButton
+            android:id="@+id/fragment_fly1_armed_button_imagebutton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:src="@drawable/ic_lock_open_white_18dp" />
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/fragment_fly1_setting_button_imagebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:background="#00000000"
+                android:src="@drawable/ic_settings_white_18dp" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fragment_fly1_bottom_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="#000000"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:background="@drawable/ic_timer_white_18dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/activity_fly1_timer_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 SEC"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:background="@drawable/ic_keyboard_capslock_white_18dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/fragment_fly1_altitude_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 M"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dip"
+                android:background="@drawable/ic_battery_std_white_18dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/fragment_fly1_battety_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 %"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/fragment_fly1_bottom_bar_layout"
+        android:layout_below="@id/fragment_fly1_top_bar_layout">
+
+        <SurfaceView
+            android:id="@+id/fragment_fly1_videoview_surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/fragment_fly1_left_side_control_contain_layout"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.joystick.RollPitchJoystick
+                    android:id="@+id/fragment_fly1_roll_pitch_joystick"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/fragment_fly1_right_side_control_contain_layout"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.joystick.YawThrottleJoystick
+                    android:id="@+id/fragment_fly1_throttle_yaw_joystick"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
