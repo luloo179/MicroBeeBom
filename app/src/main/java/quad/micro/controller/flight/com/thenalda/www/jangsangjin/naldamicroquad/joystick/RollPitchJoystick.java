@@ -266,7 +266,9 @@ public class RollPitchJoystick extends View implements Runnable{
 
     @Override
     public void run() {
+
         while (!Thread.interrupted()) {
+
             post(new Runnable() {
                 public void run() {
                     if (onJoystickMoveListener != null)

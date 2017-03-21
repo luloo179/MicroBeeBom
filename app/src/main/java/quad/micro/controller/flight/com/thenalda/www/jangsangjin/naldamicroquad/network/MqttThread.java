@@ -3,17 +3,23 @@ package quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.MainActivity;
 
 /**
  * Created by jangsangjin on 2017. 2. 22..
  */
 
-public class MqttThread extends AsyncTask<Void, Void, Void> implements MainActivity.IMqttThread{
+public class MqttThread extends AsyncTask<Void, Void, Void> implements MainActivity.IMqttThread {
 
     private int killCode;
     private MqttNalda mqttNalda;
+    private MqttAndroidClient mqttAndroidClient;
     private String arm, mode, roll, pitch, yaw, throttle;
+    private byte[] controlData = new byte[7];
 
     @Override
     public void iMqttThread(int type, String data) {
@@ -83,7 +89,7 @@ public class MqttThread extends AsyncTask<Void, Void, Void> implements MainActiv
 
     }
 
-    public MqttThread(MqttNalda mqttNalda){
+    public MqttThread(MqttAndroidClient mqttAndroidClient) {
 
         this.killCode = 0;
         this.arm = "00";
@@ -94,22 +100,52 @@ public class MqttThread extends AsyncTask<Void, Void, Void> implements MainActiv
         this.throttle = "00";
 
         this.mqttNalda = mqttNalda;
+        this.mqttAndroidClient = mqttAndroidClient;
 
-        Log.i("PUB","START");
+        Log.i("PUB", "START");
     }
 
-    public MainActivity.IMqttThread getIMqttThread(){
+    public MainActivity.IMqttThread getIMqttThread() {
 
         return MqttThread.this;
+
+    }
+
+    private boolean mqttPublish(byte[] payload) {
+
+        String topic = "pilot/beebom";
+
+        try {
+
+            MqttMessage message = new MqttMessage(payload);
+            message.setQos(0);
+
+            if (this.mqttAndroidClient != null) {
+
+                this.mqttAndroidClient.publish(topic, payload, 0, false);
+
+                return true;
+
+            }
+
+            return false;
+
+        } catch (MqttException e) {
+
+            Log.i("ERROR", e.toString());
+
+            return false;
+
+        }
 
     }
 
     @Override
     protected Void doInBackground(Void... params) {
 
-        Log.i("PUB","MAIN");
+        Log.i("PUB", "MAIN");
 
-        while(true){
+        while (true) {
 
             try {
 
@@ -120,20 +156,22 @@ public class MqttThread extends AsyncTask<Void, Void, Void> implements MainActiv
                         break;
                     }
 
-                    if(isCancelled()) {
+                    if (isCancelled()) {
 
                         break;
 
                     }
 
-                    String payload = this.arm+this.mode+this.roll+this.pitch+this.yaw+this.throttle;
+                    String payload = this.arm + this.mode + this.roll + this.pitch + this.yaw + this.throttle;
                     this.mqttNalda.setMqttPublishControl(payload);
+
+                    mqttPublish(controlData);
 
                 }
 
                 Thread.sleep(10);
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
 
             }

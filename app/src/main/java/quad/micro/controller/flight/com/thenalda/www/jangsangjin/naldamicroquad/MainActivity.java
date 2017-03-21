@@ -31,6 +31,10 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.internal.Token;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.fly_fragment.Fly2Fragment;
 import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.main_fragment.MainFragment;
@@ -50,11 +54,14 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
     private int CONNECTION_STATE;
     private int CONNECTION_TYPE;
     private String MQTT_ID;
+    private byte[] controlByteArray = new byte[7];
+    private float autopilotAlt;
 
     private ProgressDialog progressDialog;
     private MqttAndroidClient mqttAndroidClient;
 
     private MainFragment mainFragment;
+    private Fly2Fragment fly2Fragment;
 
     private MqttNalda mqttNalda;
     private MqttThread mqttThread;
@@ -249,13 +256,13 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
                     createMqttConnection();
 
-                }else if (CONNECTION_STATE == 1) {
+                } else if (CONNECTION_STATE == 1) {
                     //connected
 
                     unsubscribeMqtt();
                     //disconnectMqttConnection();
 
-                }else if (CONNECTION_STATE == 2) {
+                } else if (CONNECTION_STATE == 2) {
                     //connect lose
 
                     unsubscribeMqtt();
@@ -297,17 +304,35 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
     }
 
     @Override
-    public void iFly2Fragment(int type, String data) {
+    public synchronized void iFly2Fragment(int type, byte data) {
         //fly fragment callback
 
         switch (type) {
 
-            case 0: {
+            case -1: {
+
+                for (int i = 0; i < 7; i++) {
+
+                    controlByteArray[i] = 0x00;
+
+                }
+
+                mqttPublish(controlByteArray);
 
                 fragmentIndex = 0;
                 fragmentChange(fragmentIndex);
 
                 break;
+
+            }
+
+            default: {
+
+                controlByteArray[type] = data;
+                mqttPublish(controlByteArray);
+
+                return;
+
             }
 
         }
@@ -388,7 +413,7 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
     }
 
     @Override
-    public void iSetupGainFragment(int type, String order1, String order2) {
+    public void iSetupGainFragment(int type, int gainA, int gainB) {
         //roll pitch yaw alt pos gain setting
 
         Log.i("SETUP", type + " TYPE");
@@ -404,17 +429,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         if (type == 4) {
             //roll gain
 
-            if (mqttConnectionState == 1) {
+            if (CONNECTION_STATE == 1) {
 
-                if (mqttNalda != null) {
+                byte[] setupByteArray = new byte[6];
+                setupByteArray[0] = (byte) 0x01;
+                setupByteArray[1] = (byte) 1;
+                setupByteArray[2] = (byte) gainA;
+                setupByteArray[3] = (byte) (gainA >>> 8);
+                setupByteArray[4] = (byte) gainB;
+                setupByteArray[5] = (byte) (gainB >>> 8);
 
-                    mqttNalda.setMqttPublishSetting("001" + order1 + order2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                }
+                mqttPublish(setupByteArray);
 
             } else {
 
@@ -427,17 +452,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         if (type == 5) {
             //pitch gain
 
-            if (mqttConnectionState == 1) {
+            if (CONNECTION_STATE == 1) {
 
-                if (mqttNalda != null) {
+                byte[] setupByteArray = new byte[6];
+                setupByteArray[0] = (byte) 0x01;
+                setupByteArray[1] = (byte) 2;
+                setupByteArray[2] = (byte) gainA;
+                setupByteArray[3] = (byte) (gainA >>> 8);
+                setupByteArray[4] = (byte) gainB;
+                setupByteArray[5] = (byte) (gainB >>> 8);
 
-                    mqttNalda.setMqttPublishSetting("002" + order1 + order2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                }
+                mqttPublish(setupByteArray);
 
             } else {
 
@@ -450,17 +475,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         if (type == 6) {
             //yaw gain
 
-            if (mqttConnectionState == 1) {
+            if (CONNECTION_STATE == 1) {
 
-                if (mqttNalda != null) {
+                byte[] setupByteArray = new byte[6];
+                setupByteArray[0] = (byte) 0x01;
+                setupByteArray[1] = (byte) 3;
+                setupByteArray[2] = (byte) gainA;
+                setupByteArray[3] = (byte) (gainA >>> 8);
+                setupByteArray[4] = (byte) gainB;
+                setupByteArray[5] = (byte) (gainB >>> 8);
 
-                    mqttNalda.setMqttPublishSetting("003" + order1 + order2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                }
+                mqttPublish(setupByteArray);
 
             } else {
 
@@ -473,17 +498,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         if (type == 7) {
             //altitude gain
 
-            if (mqttConnectionState == 1) {
+            if (CONNECTION_STATE == 1) {
 
-                if (mqttNalda != null) {
+                byte[] setupByteArray = new byte[6];
+                setupByteArray[0] = (byte) 0x01;
+                setupByteArray[1] = (byte) 4;
+                setupByteArray[2] = (byte) gainA;
+                setupByteArray[3] = (byte) (gainA >>> 8);
+                setupByteArray[4] = (byte) gainB;
+                setupByteArray[5] = (byte) (gainB >>> 8);
 
-                    mqttNalda.setMqttPublishSetting("004" + order1 + order2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                }
+                mqttPublish(setupByteArray);
 
             } else {
 
@@ -496,17 +521,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         if (type == 8) {
             //position gain
 
-            if (mqttConnectionState == 1) {
+            if (CONNECTION_STATE == 1) {
 
-                if (mqttNalda != null) {
+                byte[] setupByteArray = new byte[6];
+                setupByteArray[0] = (byte) 0x01;
+                setupByteArray[1] = (byte) 5;
+                setupByteArray[2] = (byte) gainA;
+                setupByteArray[3] = (byte) (gainA >>> 8);
+                setupByteArray[4] = (byte) gainB;
+                setupByteArray[5] = (byte) (gainB >>> 8);
 
-                    mqttNalda.setMqttPublishSetting("005" + order1 + order2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                }
+                mqttPublish(setupByteArray);
 
             } else {
 
@@ -572,17 +597,19 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
             if (type == 10) {
 
-                if (mqttConnectionState == 1) {
+                Log.i("ACCEL BIAS", "ACCEL");
 
-                    if (mqttNalda != null) {
+                if (CONNECTION_STATE == 1) {
 
-                        mqttNalda.setMqttPublishSetting("007000000");
+                    byte[] setupByteArray = new byte[6];
+                    setupByteArray[0] = (byte) 0x01;
+                    setupByteArray[1] = (byte) 7;
+                    setupByteArray[2] = (byte) 0;
+                    setupByteArray[3] = (byte) 0;
+                    setupByteArray[4] = (byte) 0;
+                    setupByteArray[5] = (byte) 0;
 
-                    } else {
-
-                        Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                    }
+                    mqttPublish(setupByteArray);
 
                 } else {
 
@@ -594,17 +621,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
             if (type == 11) {
 
-                if (mqttConnectionState == 1) {
+                if (CONNECTION_STATE == 1) {
 
-                    if (mqttNalda != null) {
+                    byte[] setupByteArray = new byte[6];
+                    setupByteArray[0] = (byte) 0x01;
+                    setupByteArray[1] = (byte) 8;
+                    setupByteArray[2] = (byte) 0;
+                    setupByteArray[3] = (byte) 0;
+                    setupByteArray[4] = (byte) 0;
+                    setupByteArray[5] = (byte) 0;
 
-                        mqttNalda.setMqttPublishSetting("008000000");
-
-                    } else {
-
-                        Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                    }
+                    mqttPublish(setupByteArray);
 
                 } else {
 
@@ -615,18 +642,17 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
             }
 
             if (type == 12) {
+                if (CONNECTION_STATE == 1) {
 
-                if (mqttConnectionState == 1) {
+                    byte[] setupByteArray = new byte[6];
+                    setupByteArray[0] = (byte) 0x01;
+                    setupByteArray[1] = (byte) 9;
+                    setupByteArray[2] = (byte) 0;
+                    setupByteArray[3] = (byte) 0;
+                    setupByteArray[4] = (byte) 0;
+                    setupByteArray[5] = (byte) 0;
 
-                    if (mqttNalda != null) {
-
-                        mqttNalda.setMqttPublishSetting("009000000");
-
-                    } else {
-
-                        Toast.makeText(MainActivity.this, "BeeBom is not connected", Toast.LENGTH_SHORT).show();
-
-                    }
+                    mqttPublish(setupByteArray);
 
                 } else {
 
@@ -643,6 +669,7 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
@@ -667,7 +694,6 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
         }
 
         this.fragmentIndex = 0;
-
         fragmentChange(this.fragmentIndex);
 
     }
@@ -757,27 +783,13 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
                 //start control thread and start viewer thread
                 //handler update autopilot state info
 
-                if (mqttThread != null) {
+                for (int i = 0; i < 7; i++) {
 
-                    mqttThread.cancel(true);
-
-                }
-
-                if (mqttConnectionState != 0) {
-
-                    mqttThread = new MqttThread(mqttNalda);
-                    iMqttThread = mqttThread.getIMqttThread();
-                    mqttThread.execute();
-
-                } else {
-
-                    iMqttThread = null;
+                    controlByteArray[i] = (byte) 0;
 
                 }
 
-                Fly2Fragment fly2Fragment = Fly2Fragment.newInstance(mqttConnectionState, MainActivity.this, iMqttThread);
-                fly2FragmentHandler = fly2Fragment.getFly2FragmentHandler();
-
+                this.fly2Fragment = Fly2Fragment.newInstance(CONNECTION_STATE, MainActivity.this);
                 fragmentTransaction.replace(R.id.activity_main, fly2Fragment);
                 fragmentTransaction.commit();
 
@@ -803,79 +815,6 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
                 break;
 
             }
-
-        }
-
-    }
-
-    //back button and app close
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-
-            if (fragmentIndex == 0) {
-
-                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
-                alert_confirm.setMessage("Exit App?").setCancelable(false).setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                if (mqttNalda != null) {
-
-                                    if (mqttConnectionState == 1) {
-
-                                        mqttNalda.disConnect();
-
-                                    }
-                                }
-
-                                finish();
-
-                            }
-                        }).setNegativeButton("CANCEL",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                return;
-
-                            }
-                        });
-
-                AlertDialog alert = alert_confirm.create();
-                alert.show();
-
-            }
-
-            if (fragmentIndex == 1) {
-
-                if (iMqttThread != null) {
-
-                    iMqttThread.iMqttThread(-1, "NULL");
-
-                }
-
-                fragmentChange(0);
-
-            }
-
-            return false;
-
-        }
-
-        return super.onKeyDown(keyCode, event);
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (mqttThread != null) {
-
-            mqttThread.cancel(true);
 
         }
 
@@ -1255,7 +1194,7 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
     private void unsubscribeMqtt() {
 
-        Log.i("UNSUB","UN");
+        Log.i("UNSUB", "UN");
 
         this.progressDialog = new ProgressDialog(MainActivity.this);
         this.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -1382,6 +1321,36 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
     }
 
+    private boolean mqttPublish(byte[] payload) {
+
+        String topic = "pilot/beebom";
+
+        try {
+
+            MqttMessage message = new MqttMessage(payload);
+            message.setQos(0);
+            message.setRetained(false);
+
+            if (this.mqttAndroidClient != null) {
+
+                this.mqttAndroidClient.publish(topic, message);
+
+                return true;
+
+            }
+
+            return false;
+
+        } catch (MqttException e) {
+
+            Log.i("ERROR", e.toString());
+
+            return false;
+
+        }
+
+    }
+
     private MqttCallbackExtended mqttCallbackExtended = new MqttCallbackExtended() {
 
         @Override
@@ -1401,14 +1370,100 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
 
             Log.i("TOPIC", message.toString());
 
+            String payload = new String(message.getPayload());
+
+            JSONObject jsonObject = new JSONObject(payload);
+
+            try {
+
+                int alt = jsonObject.getInt("alt");
+
+                autopilotAlt = alt / 10.0f;
+
+                if(fly2Fragment != null && fragmentIndex == 1){
+
+                    fly2Fragment.updateAltitude(autopilotAlt);
+
+                }
+
+            } catch (JSONException e) {
+
+                Log.i("JSON ERROR",e.toString());
+
+            }
+
         }
 
         @Override
         public void deliveryComplete(IMqttDeliveryToken token) {
 
-            Log.i("TOPIC", "DEL");
 
         }
     };
+
+
+    //back button and app close
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
+            if (fragmentIndex == 0) {
+
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(this);
+                alert_confirm.setMessage("Exit App?").setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (mqttNalda != null) {
+
+                            if (mqttConnectionState == 1) {
+
+                                mqttNalda.disConnect();
+
+                            }
+                        }
+
+                        finish();
+
+                    }
+                }).setNegativeButton("CANCEL",
+                        new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                return;
+
+                            }
+                        });
+
+                AlertDialog alert = alert_confirm.create();
+                alert.show();
+
+            }
+
+            if (fragmentIndex == 1) {
+
+                fragmentIndex = 0;
+                fragmentChange(fragmentIndex);
+
+            }
+
+            return false;
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
 
 }

@@ -31,7 +31,7 @@ public class SetupGainFragment extends Fragment {
 
     public interface ISetupGainFragment {
 
-        void iSetupGainFragment(int type, String order1, String order2);
+        void iSetupGainFragment(int type, int gainA, int gainB);
 
     }
 
@@ -222,8 +222,8 @@ public class SetupGainFragment extends Fragment {
                 gainTitleTextview.setText("Roll Gain Settings");
 
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                this.gainA = sharedPref.getInt("ROLL_GAIN_A", 30);
-                this.gainB = sharedPref.getInt("ROLL_GAIN_B", 90);
+                this.gainA = sharedPref.getInt("ROLL_GAIN_A", 400);
+                this.gainB = sharedPref.getInt("ROLL_GAIN_B", 1800);
 
                 break;
             }
@@ -234,8 +234,8 @@ public class SetupGainFragment extends Fragment {
                 gainTitleTextview.setText("Pitch Gain Settings");
 
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                this.gainA = sharedPref.getInt("PITCH_GAIN_A", 30);
-                this.gainB = sharedPref.getInt("PITCH_GAIN_B", 90);
+                this.gainA = sharedPref.getInt("PITCH_GAIN_A", 400);
+                this.gainB = sharedPref.getInt("PITCH_GAIN_B", 1800);
 
                 break;
             }
@@ -246,8 +246,8 @@ public class SetupGainFragment extends Fragment {
                 gainTitleTextview.setText("Yaw Gain Settings");
 
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                this.gainA = sharedPref.getInt("YAW_GAIN_A", 10);
-                this.gainB = sharedPref.getInt("YAW_GAIN_B", 35);
+                this.gainA = sharedPref.getInt("YAW_GAIN_A", 200);
+                this.gainB = sharedPref.getInt("YAW_GAIN_B", 550);
 
                 break;
             }
@@ -259,8 +259,8 @@ public class SetupGainFragment extends Fragment {
 
 
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                this.gainA = sharedPref.getInt("ALT_GAIN_A", 45);
-                this.gainB = sharedPref.getInt("ALT_GAIN_B", 90);
+                this.gainA = sharedPref.getInt("ALT_GAIN_A", 450);
+                this.gainB = sharedPref.getInt("ALT_GAIN_B", 900);
 
                 break;
             }
@@ -272,8 +272,8 @@ public class SetupGainFragment extends Fragment {
 
 
                 SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-                this.gainA = sharedPref.getInt("POS_GAIN_A", 30);
-                this.gainB = sharedPref.getInt("POS_GAIN_B", 90);
+                this.gainA = sharedPref.getInt("POS_GAIN_A", 450);
+                this.gainB = sharedPref.getInt("POS_GAIN_B", 900);
 
                 break;
             }
@@ -287,7 +287,7 @@ public class SetupGainFragment extends Fragment {
         ImageButton gainAPlusButton = (ImageButton) view.findViewById(R.id.fragment_setup_gain_gain_a_plus_imagebutton);
         gainAPlusButton.setOnClickListener(onClickListener);
         this.gainAseekbar = (SeekBar) view.findViewById(R.id.fragment_setup_gain_gain_a_seekbar);
-        this.gainAseekbar.setMax(200);
+        this.gainAseekbar.setMax(2000);
         this.gainAseekbar.setOnSeekBarChangeListener(onSeekBarChangeListener);
         this.gainAseekbar.setProgress(this.gainA);
 
@@ -298,7 +298,7 @@ public class SetupGainFragment extends Fragment {
         ImageButton gainBPlusButton = (ImageButton) view.findViewById(R.id.fragment_setup_gain_gain_b_plus_imagebutton);
         gainBPlusButton.setOnClickListener(onClickListener);
         this.gainBseekbar = (SeekBar) view.findViewById(R.id.fragment_setup_gain_gain_b_seekbar);
-        this.gainBseekbar.setMax(400);
+        this.gainBseekbar.setMax(6000);
         this.gainBseekbar.setOnSeekBarChangeListener(onSeekBarChangeListener);
         this.gainBseekbar.setProgress(this.gainB);
 
@@ -319,7 +319,7 @@ public class SetupGainFragment extends Fragment {
 
                     if (iSetupGainFragment != null) {
 
-                        iSetupGainFragment.iSetupGainFragment(0, "NULL", "NULL");
+                        iSetupGainFragment.iSetupGainFragment(0, 0, 0);
 
                     }
 
@@ -358,42 +358,9 @@ public class SetupGainFragment extends Fragment {
 
                     if (iSetupGainFragment != null) {
 
-                        String strGainA = "";
-                        String strGainB = "";
+                        iSetupGainFragment.iSetupGainFragment(type, gainA, gainB);
 
-                        if (gainA < 10) {
-
-                            strGainA = "00";
-                            strGainA += Integer.toString(gainA);
-
-                        } else if (gainA < 100) {
-
-                            strGainA = "0";
-                            strGainA += Integer.toString(gainA);
-
-                        } else {
-
-                            strGainA = Integer.toString(gainA);
-
-                        }
-
-                        if (gainB < 10) {
-
-                            strGainB = "00";
-                            strGainB += Integer.toString(gainB);
-
-                        } else if (gainB < 100) {
-
-                            strGainB = "0";
-                            strGainB += Integer.toString(gainB);
-
-                        } else {
-
-                            strGainB = Integer.toString(gainB);
-
-                        }
-
-                        iSetupGainFragment.iSetupGainFragment(type, strGainA, strGainB);
+                        saveLocalGain();
 
                     }
 
@@ -435,5 +402,78 @@ public class SetupGainFragment extends Fragment {
 
         }
     };
+
+    private void saveLocalGain(){
+
+        switch (type) {
+
+            case 4: {
+                //roll gain
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putInt("ROLL_GAIN_A", gainA);
+                editor.putInt("ROLL_GAIN_B", gainB);
+                editor.commit();
+
+                break;
+            }
+
+            case 5: {
+                //pitch gain
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putInt("PITCH_GAIN_A", gainA);
+                editor.putInt("PITCH_GAIN_B", gainB);
+                editor.commit();
+
+                break;
+            }
+
+            case 6: {
+                //yaw gain
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putInt("YAW_GAIN_A", gainA);
+                editor.putInt("YAW_GAIN_B", gainB);
+                editor.commit();
+
+                break;
+            }
+
+            case 7: {
+                //altidue gain
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putInt("ALT_GAIN_A", gainA);
+                editor.putInt("ALT_GAIN_B", gainB);
+                editor.commit();
+
+                break;
+            }
+
+            case 8: {
+                //position gain
+
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                editor.putInt("POS_GAIN_A", gainA);
+                editor.putInt("POS_GAIN_B", gainB);
+                editor.commit();
+
+                break;
+            }
+
+        }
+
+    }
 
 }
