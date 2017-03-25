@@ -36,6 +36,7 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     private int armedState;
     private int connectionState;
     private float rollPitchMaxAngle = 10.0f;
+    private static int timeOutput = 5;
 
     private IFlay2Fragment iFlay2Fragment;
     private ImageButton armedButton;
@@ -45,6 +46,8 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     private ThrottleSeekbar throttleSeekbar;
     private CallbackLoopThread callbackLoopThread;
     private RadioButton modeRadioButton[] = new RadioButton[3];
+
+    private MjpegView quadStreamingMjpegView;
 
     public interface IFlay2Fragment {
 
@@ -116,26 +119,28 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
         this.callbackLoopThread = new CallbackLoopThread(handler);
         this.callbackLoopThread.execute();
 
+        this.quadStreamingMjpegView = (MjpegView) view.findViewById(R.id.fragment_fly2_mjpegview);
+
         return view;
 
     }
 
-    public void updateConnectionState(int connectionState){
+    public void updateConnectionState(int connectionState) {
 
 
     }
 
-    public void updateAltitude(float altitude){
+    public void updateAltitude(float altitude) {
 
-        if(altTextview != null){
+        if (altTextview != null) {
 
-            altTextview.setText(Float.toString(altitude)+" M");
+            altTextview.setText(Float.toString(altitude) + " M");
 
         }
 
     }
 
-    public void updateBattery(int battery){
+    public void updateBattery(int battery) {
 
 
     }
@@ -416,7 +421,7 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
 
             if (iFlay2Fragment != null) {
 
-                if(progress > 250){
+                if (progress > 250) {
 
                     progress = 250;
 
@@ -498,17 +503,39 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
         }
     };
 
+    private void loadIpCam() {
+        Mjpeg.newInstance()
+                .credential("", "")
+                .open("http://192.168.42.1:9000/?action=stream", 5)
+                .subscribe(inputStream -> {
+                            quadStreamingMjpegView.setSource(inputStream);
+                            quadStreamingMjpegView.setDisplayMode(DisplayMode.FULLSCREEN);
+                            quadStreamingMjpegView.showFps(true);
+                        },
+                        throwable -> {
+                            Log.e(getClass().getSimpleName(), "mjpeg error", throwable);
+                            Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //loadIpCam();
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();
 
-        if(callbackLoopThread != null){
+        if (callbackLoopThread != null) {
 
             callbackLoopThread.cancel(true);
 
-            if(iFlay2Fragment != null){
+            if (iFlay2Fragment != null) {
 
-                for(int i=0;i>7;i++) {
+                for (int i = 0; i > 7; i++) {
 
                     iFlay2Fragment.iFly2Fragment(i, (byte) 0);
 
@@ -524,13 +551,13 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     public void onDetach() {
         super.onDetach();
 
-        if(callbackLoopThread != null){
+        if (callbackLoopThread != null) {
 
             callbackLoopThread.cancel(true);
 
-            if(iFlay2Fragment != null){
+            if (iFlay2Fragment != null) {
 
-                for(int i=0;i>7;i++) {
+                for (int i = 0; i > 7; i++) {
 
                     iFlay2Fragment.iFly2Fragment(i, (byte) 0);
 
