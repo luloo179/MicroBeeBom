@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#00000000"
-            android:src="@drawable/ic_videocam_white_18dp" />
+            android:src="@drawable/ic_videocam_off_white_18dp" />
 
         <TextView
             android:id="@+id/fragment_fly2_connection_state_textview"

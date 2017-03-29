@@ -47,7 +47,7 @@ import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.
 import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.setup_fragment.SetupListFragment;
 import quad.micro.controller.flight.com.thenalda.www.jangsangjin.naldamicroquad.setup_fragment.SetupTrimFragment;
 
-public class MainActivity extends FragmentActivity implements MainFragment.IMainFragment, Fly2Fragment.IFlay2Fragment, SetupListFragment.ISetupListFragment, SetupGainFragment.ISetupGainFragment, SetupTrimFragment.ISetupTrimFragment, SetupBiasFragment.ISetupBiasFragment {
+public class MainActivity extends FragmentActivity implements MainFragment.IMainFragment, Fly2Fragment.IFlay2Fragment, SetupListFragment.ISetupListFragment, SetupGainFragment.ISetupGainFragment, SetupTrimFragment.ISetupTrimFragment, SetupBiasFragment.ISetupBiasFragment, SetupInterfaceFragment.ISetupInterfaceFragment {
 
     private final String LOCAL_URL = "tcp://192.168.42.1:1883";
     private final String GLOBAL_URL = "tcp://192.168.42.1:1883";
@@ -371,7 +371,7 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
                 //interface
                 setupTypeIndex = type;
 
-                SetupInterfaceFragment setupInterfaceFragment = new SetupInterfaceFragment();
+                SetupInterfaceFragment setupInterfaceFragment = SetupInterfaceFragment.newInstance(MainActivity.this);
                 fragmentTransaction.replace(R.id.activity_main, setupInterfaceFragment);
                 fragmentTransaction.commit();
 
@@ -661,6 +661,18 @@ public class MainActivity extends FragmentActivity implements MainFragment.IMain
                 }
 
             }
+
+        }
+
+    }
+
+    @Override
+    public void iSetupInterfaceFragment(int type) {
+
+        if(type == 0){
+
+            this.fragmentIndex = 2;
+            fragmentChange(this.fragmentIndex);
 
         }
 

@@ -47,6 +47,8 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     private CallbackLoopThread callbackLoopThread;
     private RadioButton modeRadioButton[] = new RadioButton[3];
 
+    private int videoState;
+    private ImageButton videoImageButton;
     private MjpegView quadStreamingMjpegView;
 
     public interface IFlay2Fragment {
@@ -119,7 +121,12 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
         this.callbackLoopThread = new CallbackLoopThread(handler);
         this.callbackLoopThread.execute();
 
+        this.videoState = 0;
+        this.videoImageButton = (ImageButton) view.findViewById(R.id.fragment_fly2_video_imagebutton);
         this.quadStreamingMjpegView = (MjpegView) view.findViewById(R.id.fragment_fly2_mjpegview);
+
+        this.videoState = 1;
+        loadIpCam();
 
         return view;
 
@@ -506,28 +513,56 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     private void loadIpCam() {
         Mjpeg.newInstance()
                 .credential("", "")
-                .open("http://192.168.42.1:9000/?action=stream", 5)
+                .open("http://192.168.42.1:9000/?action=stream", 1)
                 .subscribe(inputStream -> {
+
+                            if(videoImageButton != null){
+
+                                videoImageButton.setImageResource(R.drawable.ic_videocam_white_18dp);
+
+                            }
+
                             quadStreamingMjpegView.setSource(inputStream);
                             quadStreamingMjpegView.setDisplayMode(DisplayMode.FULLSCREEN);
                             quadStreamingMjpegView.showFps(true);
+
                         },
                         throwable -> {
+
                             Log.e(getClass().getSimpleName(), "mjpeg error", throwable);
-                            Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+
+                            if(getActivity() != null) {
+
+                                Toast.makeText(getActivity(), "Camera Error", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            videoState = 0;
+
+                            if(videoImageButton != null){
+
+                                videoImageButton.setImageResource(R.drawable.ic_videocam_off_white_18dp);
+
+                            }
+
                         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //loadIpCam();
 
     }
 
     @Override
     public void onPause() {
         super.onPause();
+
+        if(quadStreamingMjpegView != null){
+
+            quadStreamingMjpegView.stopPlayback();
+
+        }
 
         if (callbackLoopThread != null) {
 
@@ -550,6 +585,12 @@ public class Fly2Fragment extends android.support.v4.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        if(quadStreamingMjpegView != null){
+
+            quadStreamingMjpegView.stopPlayback();
+
+        }
 
         if (callbackLoopThread != null) {
 
