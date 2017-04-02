@@ -30,7 +30,7 @@ public class SplashActivity extends Activity {
             }
         };
 
-        handler.sendEmptyMessageDelayed(0, 1000);
+        handler.sendEmptyMessageDelayed(0, 2500);
 
     }
 
